@@ -4,26 +4,30 @@ import { Text, View } from "react-native";
 import SignIn from "../../pages/SignIn/SignIn";
 import Loading from "../Loading/Loading";
 import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
 
 export default function ProtectedPage(props){
         let navigation = useNavigation()
       const [isLoggedIn, setIsLoggedIn] = useState(false);
       const [loading, setLoading] = useState(true);
-      const getUser  = async () => {
-        AsyncStorage.getItem('user').then(rs=>{
+
+        let userAuth = useSelector((state)=>{
+            return state.auth
+        })
+      const getUser  = () => {
+        console.log(userAuth.user);
             setLoading(false)
-            if(rs){
+            if(userAuth.user){
                 setIsLoggedIn(true)
             }else{
+                console.log("sdsdsd2222222222222222222222222222");
                 navigation.navigate("SignIn")
             }
-        })
       }
     useEffect(()=>{
-        navigation.addListener('focus', () => {
+        console.log("sdsdsd");
             getUser()
-          });
-    },[isLoggedIn])
+    },[userAuth])
     const Page = props.page;
     const renderComponent = ()=>{
         if(props.layout){

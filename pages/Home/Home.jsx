@@ -1,4 +1,4 @@
-import { Button, Image, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Button, FlatList, Image, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { styles } from "./styles";
 import Icon from "react-native-vector-icons/EvilIcons";
@@ -7,11 +7,17 @@ import PostItem from "../../ui/PostItem/PostItem";
 import { posts, users } from "./service";
 import { useEffect, useState } from "react";
 import Loading from "../../ui/Loading/Loading";
+import * as Notifications from 'expo-notifications';
+
 import { TabActions, useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllPostThunk } from "../../redux/slice/postSlice";
 export default function Home(props) {
+    const PAGE_SIZE = 10;
     let totalImage = 0;
     const [loading, setLoading] = useState(true)
-    const [loadingSuscess, setLoadingSuscess] = useState(0)
+    const [pageNumber, setPageNumber] = useState(0)
+
     let navigation = useNavigation()
     let story = {
         fullName: "Ngọc Huy",
@@ -29,45 +35,43 @@ export default function Home(props) {
     }
     const loadedImages =(total)=>{
         totalImage = totalImage -total
-        console.log(totalImage);
     }
-    const init = ()=>{
-        postsRs.map(tmp=>{
-            totalImage+= tmp.image.length
-        })
-
-    }
+    const getPosts = useSelector(state => state.post.posts)
+    let dispatch = useDispatch()
     useEffect(()=>{
-        console.log('Home focused');
-            if(totalImage === 0){
-                console.log("hoan thanh", loadingSuscess);
-                setTimeout(()=>{setLoading(false)}, 500)
-                
-            }
-        // navigation.addListener('focus',()=>{
-
-        // })
-
-        // navigation.addListener('blur',()=>{
-        //     setLoading(true)
-
-        // })
-
+        getPage()
+        setLoading(false)
     },[])
+    const getPage = ()=>{
+        dispatch(getAllPostThunk({pageNumber:pageNumber, pageSize:PAGE_SIZE}))    
+        setPageNumber(pageNumber + 1)
+    }
+    const schedulePushNotification= async()=> {
+        console.log("dsdsdsd");
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title: "You've got mail! 📬",
+            body: 'Here is the notification body',
+            data: { data: 'goes here' },
+          },
+          trigger: { seconds: 1 },
+        });
+      }
     return (
         <View style={{width:'100%', height:'100%'}}>
+
+            
                     {loading ? <Loading/>:
 ""        }
             <View style={styles.homeMain}>
             <View style={styles.searchMain}>
                 <TouchableOpacity
                 activeOpacity={0.8}
-                style={{ ...styles.itemNavbar}}
+                style={{ ...styles.itemNavbar, ...styles.iconSearch}}
                             >
                     <Icon.Button
                         backgroundColor={'rgba(206, 206, 206, 0)'}
                         color={'black'}
-                        style={styles.iconSearch}
                         name={'search'}
                     />
                 </TouchableOpacity>
@@ -81,7 +85,7 @@ export default function Home(props) {
             
             <View style={styles.listPost}>
                 
-                <ScrollView  showsVerticalScrollIndicator={false}>
+                {/* <ScrollView  showsVerticalScrollIndicator={false}>
                         <View style={styles.listStory}>
                             <ScrollView   horizontal={true} showsHorizontalScrollIndicator={false}>
                                     <ItemStoryHomee data={story} create = {true}/>
@@ -91,13 +95,16 @@ export default function Home(props) {
 
                             </ScrollView>
                         </View>
-
-                        {postsRs.map((tmp,index)=>{
-                          return (<PostItem key={index} data={tmp} countImages={countImages} loadedImages ={loadedImages} />)
-                        })}
                         
 
-                </ScrollView>
+                </ScrollView> */}
+                <FlatList
+                            data={getPosts}
+                            onEndReached={()=>{getPage()}}
+                            onEndReachedThreshold={0.6}
+                            renderItem={({item}) => <PostItem data={item} countImages={countImages} loadedImages ={loadedImages} />}
+                            keyExtractor={(item,index) => index}
+                        /> 
             </View>
         </View>
         </View>

@@ -1,13 +1,21 @@
 import { Button, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { styles } from './styles'
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { useState } from "react";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect, useState } from "react";
 import InputForm from "../../ui/InputForm/InputForm";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import { signIn } from "../../redux/slice/authSlice";
 
 export default function SignIn({ }) {
     let navigation = useNavigation()
+    const [username, setUsername] = useState("")
+    const [password, setPassword] = useState("")
+
+    let dispatch = useDispatch()
+    let authState = useSelector((state)=>{
+        return state.auth
+    })
     const [hover, setHover] = useState("")
     const hoverRef = (text) => {
         if(text === 'signup'){
@@ -20,11 +28,16 @@ export default function SignIn({ }) {
             setHover("")
         }, 200)
     }
+    useEffect(()=>{
+        console.log(authState);
 
-    const signIn = async()=>{
-        await AsyncStorage.setItem('user', "ngochuy").then(()=>{
-            navigation.navigate("Home")
-        })
+        if(authState.user)
+        navigation.navigate("Home")
+    }, [authState.user])
+
+    const handleSignIn = ()=>{
+        dispatch(signIn({username, password, tokenExpo: authState.tokenExpo}))
+       
         
     }
     return (
@@ -37,16 +50,20 @@ export default function SignIn({ }) {
 
                 <View style={styles.form} >
                     <InputForm 
+                        value ={username}
+                        change ={setUsername}
                         placeholder="Email"/>
 
                     <InputForm 
+                        value ={password}
+                        change ={setPassword}
                         secureTextEntry={true}
                         placeholder="Password"
                     />
                     <TouchableOpacity
                         activeOpacity={0.8}
                         style={styles.appButtonContainer}
-                        onPress={signIn}
+                        onPress={handleSignIn}
                     >
                         <Text style={styles.appButtonText}>Sign In</Text>
                     </TouchableOpacity>

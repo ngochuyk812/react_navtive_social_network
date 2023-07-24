@@ -6,5 +6,8 @@ export const styles = StyleSheet.create({
   },
   iconNavbar:{
     backgroundColor:'#ff7f5000'
+  },
+  active:{
+    backgroundColor:'#017CFE'
   }
 })

@@ -1,5 +1,6 @@
 {
   "expo": {
+
     "name": "socail_network_app",
     "slug": "socail_network_app",
     "version": "1.0.0",
@@ -14,17 +15,49 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "notification": {
+      "icon": "./assets/images/iconPushNotification.png"
+    },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "UIBackgroundModes": [
+          "location",
+          "fetch"
+        ]
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "softwareKeyboardLayoutMode": "pan",
+      "package": "com.ngochuyk888.socail_network_app"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow $(PRODUCT_NAME) to access your photos.",
+          "savePhotosPermission": "Allow $(PRODUCT_NAME) to save photos.",
+          "isAccessMediaLocationEnabled": true
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "899e1ae3-13f6-4174-bc9f-52deddc2807a"
+      }
     }
   }
 }

@@ -3,19 +3,27 @@ import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
   homeMain:{
-    paddingTop:50,
-    
   }, 
 
   searchMain:{
     paddingLeft:20,
     paddingRight:20,
-    paddingBottom:10
+    position:'relative',
+    marginVertical:10
   },
+  iconSearch:{
+    width:50,
+    position:'absolute',
+    left:20,
+    top:0,
+    bottom:0,
+    alignItems:'center',
+    justifyContent:'center'
+  },
+
   itemNavbar:{
     width:50,
     position:'absolute',
-    top:2,
     left:20
     
   },
@@ -24,6 +32,7 @@ export const styles = StyleSheet.create({
   },
   inputSearch:{
     padding:10,
+    fontSize:16,
     borderColor:'lightgray',
     borderWidth:1,
     borderRadius:20,

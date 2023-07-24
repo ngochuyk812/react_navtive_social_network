@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Image } from 'react-native';
 import IconEntypo from 'react-native-vector-icons/Entypo';
 
-export default function ItemStoryHomee({data, create}){
+export default function ItemStoryHome({data, create}){
     let navigation = useNavigation()
 
     return(

@@ -4,17 +4,20 @@ import {StyleSheet} from 'react-native';
 export const styles = StyleSheet.create({
       mainNav:{
         display:'flex',
-        height:'100%',
+        height:75,
         flexDirection:'row',
         justifyContent:'space-between',
-
+        backgroundColor:'#373737',
+        position:'absolute',
+        bottom:0,
+        left:0,
+        right:0
       },
       subNav:{
         display:'flex',
         height:'100%',
         flexDirection:'row',
         justifyContent:'space-around',
-        backgroundColor:'#017cfea6',
         flex:2,
         paddingTop:15,
         
@@ -30,10 +33,11 @@ export const styles = StyleSheet.create({
       centerNav:{
         flex:1,
         alignItems:'center',
+        transform: [{translateY: -25}],
 
       },
       mainPlus:{
-        backgroundColor:'#fff9',
+        backgroundColor:'#017CFE',
         padding:8,
         paddingRight:0,
         borderRadius:50,
